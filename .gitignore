@@ -6,6 +6,7 @@
 .vscode/
 .idea/
 .Trash/
+.gitignore
 
 # Allow tracking of QDrant example project files
 !/auth.js
