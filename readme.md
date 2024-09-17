@@ -1,6 +1,6 @@
-# Zoom / Astradb Sample App
+# Zoom / QDrant Sample App
 
-This project is a Node.js application designed to fetch and process data from the Zoom API, including user information, meeting recordings, and meeting summaries. It stores the processed data in local files and can optionally push the data to an external endpoint.
+This project is a Node.js application designed to fetch and process data from the Zoom API, including user information, meeting recordings, and meeting summaries. It stores the processed data in local files and integrates with Qdrant for vector search capabilities.
 
 ## Table of Contents
 
@@ -13,7 +13,6 @@ This project is a Node.js application designed to fetch and process data from th
 - [Error Handling](#error-handling)
 - [Contributing](#contributing)
 
-
 ## Project Structure
 
 ```
@@ -25,32 +24,38 @@ This project is a Node.js application designed to fetch and process data from th
 │   ├── apiutils.js
 │   ├── dateutils.js
 │   └── fileutils.js
-└── zoomapi.js
+├── zoomapi.js
+└── vector
+    ├── insert.py
+    └── query.py
 ```
 
 - `auth.js`: Handles OAuth 2.0 authentication with Zoom API.
 - `config.js`: Contains configuration settings for the application.
 - `server.js`: The main entry point of the application.
 - `utils/`: Directory containing utility functions.
-  - `apiutils.js`: Utility functions for making API calls.
-  - `dateutils.js`: Functions for date manipulation.
-  - `fileutils.js`: Functions for file operations (downloading, writing).
 - `zoomapi.js`: Core logic for fetching and processing Zoom data.
+- `vector/`: Directory containing Python scripts for Qdrant operations.
 
-Setup
+## Setup
 
 1. Clone the repository:
     ```
-    git clone https://github.com/ojusave/zmail_astradb.git
-    cd zmail_astradb
+    git clone https://github.com/ojusave/qdrant_example_zoom.git
+    cd qdrant_example_zoom
     ```
 
-2. Install dependencies:
+2. Install Node.js dependencies:
    ```
    npm install
    ```
 
-3. Set up your `config.js` file with the necessary credentials and settings.
+3. Install Python dependencies:
+   ```
+   pip install -r requirements.txt
+   ```
+
+4. Set up your `config.js` file with the necessary credentials and settings.
 
 ## Configuration
 
@@ -58,9 +63,9 @@ Edit the `config.js` file to include your Zoom API credentials and other setting
 
 ```javascript
 const config = {
+  accountId: 'YOUR_ACCOUNT_ID',
   clientId: 'YOUR_CLIENT_ID',
   clientSecret: 'YOUR_CLIENT_SECRET',
-  accountId: 'YOUR_ACCOUNT_ID',
   zoomApiBaseUrl: 'https://api.zoom.us/v2',
   endpointUrl: 'YOUR_ENDPOINT_URL' // Optional: for pushing data to an external service
 };
@@ -76,8 +81,15 @@ To run the application:
 node server.js
 ```
 
-This will start the process of fetching data from the Zoom API, processing it, and saving it to local files.
+This will start the process of fetching data from the Zoom API, processing it, saving it to local files, and inserting it into Qdrant. After the data is processed, you can enter queries to search the vector database.
 
+## Key Features
+
+- Fetches user data, meeting recordings, and meeting summaries from Zoom API
+- Processes and cleans the fetched data
+- Stores processed data in local files
+- Inserts data into Qdrant for vector search capabilities
+- Provides an interactive query interface for searching the processed data
 
 ## API Endpoints Used
 
@@ -99,7 +111,6 @@ Please follow these steps:
 4. Commit your changes (`git commit -am 'Add some feature'`)
 5. Push to the branch (`git push origin feature/your-feature`)
 6. Create a new Pull Request
+```
 
-
-
----
+This updated README.md reflects the current structure and functionality of your project, including the integration with Qdrant for vector search capabilities and the interactive query interface. It provides clear instructions for setup, configuration, and usage, making it easier for other developers to understand and contribute to your project.
