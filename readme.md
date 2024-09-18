@@ -113,4 +113,3 @@ Please follow these steps:
 6. Create a new Pull Request
 ```
 
-This updated README.md reflects the current structure and functionality of your project, including the integration with Qdrant for vector search capabilities and the interactive query interface. It provides clear instructions for setup, configuration, and usage, making it easier for other developers to understand and contribute to your project.

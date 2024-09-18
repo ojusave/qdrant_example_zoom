@@ -39,7 +39,7 @@ def query_vector_db(query):
 
 def get_anthropic_response(query, search_results):
     # Use environment variable for the API key
-    api_key = os.getenv("ANTHROPIC_API_KEY")
+    api_key = ""
     
     if not api_key:
         raise ValueError("Anthropic API key not set in environment variables.")
