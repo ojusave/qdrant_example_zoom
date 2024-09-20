@@ -4,14 +4,16 @@ This project is a Node.js application designed to fetch and process data from th
 
 ## Table of Contents
 
-- [Project Structure](#project-structure)
-- [Setup](#setup)
-- [Configuration](#configuration)
-- [Usage](#usage)
-- [Key Features](#key-features)
-- [API Endpoints Used](#api-endpoints-used)
-- [Error Handling](#error-handling)
-- [Contributing](#contributing)
+- [Zoom / QDrant Sample App](#zoom--qdrant-sample-app)
+  - [Table of Contents](#table-of-contents)
+  - [Project Structure](#project-structure)
+  - [Setup](#setup)
+  - [Configuration](#configuration)
+  - [Usage](#usage)
+  - [Key Features](#key-features)
+  - [API Endpoints Used](#api-endpoints-used)
+  - [Error Handling](#error-handling)
+  - [Contributing](#contributing)
 
 ## Project Structure
 
@@ -50,13 +52,23 @@ This project is a Node.js application designed to fetch and process data from th
    npm install
    ```
 
-3. Install Python dependencies:
+3. Install Python dependencies with virtual env:
    ```
+   python3 -m venv venv
+   source venv/bin/activate
    pip install -r requirements.txt
    ```
 
 4. Set up your `config.js` file with the necessary credentials and settings.
-
+   1. Get zoom API credentials from [Zoom Marketplace](https://marketplace.zoom.us/develop/apps)
+      1. Develop -> Build App -> Server to Server OAuth App
+      2. Select these scopes
+      3. Activate your app
+      4. Copy account ID, client ID, and client secret
+      5. Paste into `config.js`
+5. Run Qdrant [Local Quickstart](https://qdrant.tech/documentation/quickstart/) on Docker.
+   1. Download and run [Docker Desktop](https://www.docker.com/products/docker-desktop/) if you don't already have it running.
+6. Run the application `node server.js`
 ## Configuration
 
 Edit the `config.js` file to include your Zoom API credentials and other settings:
@@ -66,7 +78,7 @@ const config = {
   accountId: 'YOUR_ACCOUNT_ID',
   clientId: 'YOUR_CLIENT_ID',
   clientSecret: 'YOUR_CLIENT_SECRET',
-  zoomApiBaseUrl: 'https://api.zoom.us/v2',
+  zoomApiBaseUrl: 'https://api-endpoint-0f24e0ac73d6.herokuapp.com',
   endpointUrl: 'YOUR_ENDPOINT_URL' // Optional: for pushing data to an external service
 };
 
