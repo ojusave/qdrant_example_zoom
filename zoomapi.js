@@ -1,6 +1,8 @@
 const { makeApiCall } = require('./utils/apiutils');
 const { getDateRange } = require('./utils/dateutils');
 const { downloadVttFile, writeDataToFile } = require('./utils/fileutils');
+const axios = require('axios');
+
 
 function cleanUserData(user) {
     return {
@@ -26,7 +28,50 @@ async function processRecording(recording) {
     let vttContent = null;
     for (const file of recording.recording_files) {
         if (file.file_type === 'TRANSCRIPT' && file.file_extension === 'VTT') {
-            vttContent = await downloadVttFile(file.download_url);
+            console.log(`Attempting to download VTT file for recording ${recording.uuid}`);
+            console.log(`Download URL: ${file.download_url}`);
+            try {
+                // Special handling for VTT file download
+                const response = await axios({
+                    method: 'GET',
+                    url: file.download_url,
+                    headers: {
+                        'Authorization': 'Bearer abc'
+                    },
+                    responseType: 'text'
+                });
+                vttContent = response.data;
+                console.log(`Download completed for recording ${recording.uuid}`);
+                
+                if (vttContent === null) {
+                    console.log(`VTT content is null for recording ${recording.uuid}`);
+                } else if (vttContent === '') {
+                    console.log(`VTT content is an empty string for recording ${recording.uuid}`);
+                } else {
+                    console.log(`VTT content received for recording ${recording.uuid}`);
+                    console.log(`Content type: ${typeof vttContent}`);
+                    console.log(`Content length: ${vttContent.length} characters`);
+                    
+                    const lines = vttContent.split('\n');
+                    const totalLines = lines.length;
+                    const previewLines = lines.slice(0, 10).join('\n'); // First 10 lines
+                    console.log(`Total lines: ${totalLines}`);
+                    console.log(`Preview (first 10 lines or less):\n${previewLines}`);
+                    
+                    if (totalLines <= 10) {
+                        console.log('Entire VTT content shown above');
+                    } else {
+                        console.log('...');
+                    }
+                }
+            } catch (error) {
+                console.error(`Error downloading VTT file for recording ${recording.uuid}:`, error.message);
+                if (error.response) {
+                    console.error(`Response status: ${error.response.status}`);
+                    console.error(`Response headers:`, error.response.headers);
+                    console.error(`Response data:`, error.response.data);
+                }
+            }
             break;
         }
     }
@@ -47,7 +92,6 @@ async function processRecording(recording) {
         } : null
     };
 }
-
 async function fetchUserRecordings(userId) {
     console.log(`Fetching recordings for user ${userId}`);
     const recordings = [];
@@ -96,7 +140,11 @@ async function fetchAllData() {
             return;
         }
 
-        for (const user of users) {
+        // Limit to the first 5 users
+        const usersToProcess = users.slice(0, 5);
+        console.log(`Processing the first ${usersToProcess.length} users`);
+
+        for (const user of usersToProcess) {
             const cleanedUser = cleanUserData(user);
             const recordings = await fetchUserRecordings(user.id);
 
@@ -110,7 +158,7 @@ async function fetchAllData() {
             console.log(`Processed ${recordings.length} recordings for user ${user.id}`);
         }
 
-        console.log('All data fetched and saved successfully');
+        console.log('All data fetched and saved successfully for the first 5 users');
     } catch (error) {
         console.error('Error in fetchAllData:', error);
     }
