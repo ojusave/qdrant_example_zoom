@@ -20,3 +20,9 @@
 # Allow all content inside utils and vector directories
 !/utils/**
 !/vector/**
+
+node_modules/
+package-lock.json
+data/
+qdrant_storage/
+venv/
